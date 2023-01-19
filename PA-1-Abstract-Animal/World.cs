@@ -19,13 +19,17 @@ namespace PA_1_Abstract_Animal
             Weight = weight;
             Noise = noise;
         }
+        public string getName()
+        {
+            return Name;
+        }
         public virtual void printInfo()
         {
             Console.WriteLine("Name: " + Name + "\nAge: " + Age + "\nWeight: " + Weight);
         }
         public void makeNoise()
         {
-            Console.WriteLine(Noise);
+            Console.WriteLine(Name + ": " + Noise);
         }
         public void ageUp()
         {
@@ -39,17 +43,18 @@ namespace PA_1_Abstract_Animal
         {}
         public override void printInfo()
         {
-            Console.WriteLine("This is a cat.");
+            Console.WriteLine(getName() + " is a cat.");
             base.printInfo();
         }
     }
     class Cassowary : Animal
     {
-        public Cassowary(string name, int age, double weight) : base(name, age, weight, "??")
+        // is this noise good enough?
+        public Cassowary(string name, int age, double weight) : base(name, age, weight, "Boom!")
         { }
         public override void printInfo()
         {
-            Console.WriteLine("This is a cassowary.");
+            Console.WriteLine(getName() + " is a cassowary.");
             base.printInfo();
         }
     }
@@ -59,7 +64,7 @@ namespace PA_1_Abstract_Animal
         { }
         public override void printInfo()
         {
-            Console.WriteLine("This is a cow.");
+            Console.WriteLine(getName() + " is a cow.");
             base.printInfo();
         }
     }
@@ -70,14 +75,26 @@ namespace PA_1_Abstract_Animal
         public void printInstructions()
         {
             Console.WriteLine("Type 1 to add an animal to the zoo.");
-            Console.WriteLine("Type 2 to remove an animal to the zoo.");
-            Console.WriteLine("Type 3 to print an animals information.");
-            Console.WriteLine("Type 4 to print every animal's name in the zoo.");
-            Console.WriteLine("Type 5 to have an animal make noise.");
+            Console.WriteLine("Type 2 to remove an animal from the zoo.");
+            Console.WriteLine("Type 3 to print a particular animal's information.");
+            Console.WriteLine("Type 4 to print every animal's information.");
+            Console.WriteLine("Type 5 to print every animal's name in the zoo.");
             Console.WriteLine("Type 6 to have every animal make noise one at a time.");
             Console.WriteLine("Type 7 to increase the age of every animal by a year.");
             Console.WriteLine("Type q to quit the program.");
             Console.WriteLine("Type h to print these instructions again.");
+        }
+        // given the name of an animal, returns the index of the animal in the list, or -1 if not found
+        public int getAnimalIndex(string name)
+        {
+            for (int i = 0; i < roster.Count; i++)
+            {
+                if (roster[i].getName() == name)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
         static void Main(string[] args)
         {
@@ -88,15 +105,20 @@ namespace PA_1_Abstract_Animal
             Console.WriteLine("Welcome to the zoo. You can add animals, remove animals, print an animal's info" +
                 "have an animal make noise, and increase the age of an animal.");
             zoo.printInstructions();
-            user_input = Console.ReadLine();
+
+            // for use in the menu, accepts user input
+            string name;
+            int age;
+            int index;
+            double weight;
+
+            // ToLower allows for H and Q to be valid, but not explicitly recommended
+            user_input = Console.ReadLine().ToLower();
             while (user_input != "q")
             {
                 switch (user_input)
                 {
                     case "1":
-                        string name;
-                        int age;
-                        double weight;
                         
                         Console.WriteLine("What is the animal's name? ");
                         name = Console.ReadLine();
@@ -110,7 +132,7 @@ namespace PA_1_Abstract_Animal
                         Console.WriteLine("What type of animal is it? Available options: cat, cassowary, cow: ");
                         user_input = Console.ReadLine().ToLower();
                         // until a valid selection is made
-                        while ( ! (user_input == "cat" || user_input == "cassowary" || user_input == "cassowary"))
+                        while ( ! (user_input == "cat" || user_input == "cassowary" || user_input == "cow"))
                         {
                             Console.WriteLine("Please select cat, cassowary, or cow: ");
                             user_input = Console.ReadLine().ToLower();
@@ -128,10 +150,66 @@ namespace PA_1_Abstract_Animal
                             zoo.roster.Add(new Cow(name, age, weight));
                         }
                         break;
+                    case "2":
+                        Console.WriteLine("What is the name of the animal you want to remove from the zoo (in the case of duplicates, the first one found): ");
+                        name = Console.ReadLine();
+                        index = zoo.getAnimalIndex(name);
+                        // if the animal is in the zoo, otherwise ignore request
+                        if (index != -1)
+                        {
+                            zoo.roster.RemoveAt(index);
+                        }
+                        break;
+                    case "3":
+                        Console.WriteLine("What is the name of the animal whose information you want printed: ");
+                        name = Console.ReadLine();
+                        index = zoo.getAnimalIndex(name);
+                        // if the animal is in the zoo, otherwise ignore request
+                        if (index != -1)
+                        {
+                            zoo.roster[index].printInfo();
+                        }
+                        break;
+                    case "4":
+                        Console.WriteLine("Every animal's information in the zoo: ");
+                        for (int i = 0; i < zoo.roster.Count; i++)
+                        {
+                            zoo.roster[i].printInfo();
+                        }
+                        break;
+                    case "5":
+                        Console.WriteLine("Every animal's name in the zoo: ");
+                        for (int i = 0; i < zoo.roster.Count; i++)
+                        {
+                            Console.WriteLine(zoo.roster[i].getName());
+                        }
+                        break;
+                    case "6":
+                        for (int i = 0; i < zoo.roster.Count; i++)
+                        {
+                            zoo.roster[i].makeNoise();
+                        }
+                        break;
+                    case "7":
+                        for (int i = 0; i < zoo.roster.Count; i++)
+                        {
+                            zoo.roster[i].ageUp();
+                        }
+                        break;
+                    case "h":
+                        zoo.printInstructions();
+                        break;
+                    case "q":
+                        // quits
+                        break;
                     default:
+                        // invalid input
+                        Console.WriteLine("Invalid Input. Try again, or type h to see the instructions again: ");
                         break;
                 }
-                user_input = Console.ReadLine();
+                // readability after each command
+                Console.WriteLine("-----------------------------");
+                user_input = Console.ReadLine().ToLower();
             }
         }
     }
