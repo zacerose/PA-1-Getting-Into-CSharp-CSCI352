@@ -31,10 +31,16 @@ namespace PA_1_Abstract_Animal
             Weight = weight;
             Noise = noise;
         }
-        // returns the name of the animal
+        // @return string the name of the animal
         public string getName()
         {
             return Name;
+        }
+
+        // @return int the age of the animal
+        public int getAge()
+        {
+            return Age;
         }
         // prints the information of the animal to console
         // @post information printed to console
@@ -48,9 +54,9 @@ namespace PA_1_Abstract_Animal
         {
             Console.WriteLine(Name + ": " + Noise);
         }
-        // increases the age of the animal by one
+        // increases the age of the animal by one. To be overriden by subclass adding more age based information.
         // @post age increased by one
-        public void ageUp()
+        public virtual void ageUp()
         {
             Age++;
         }
@@ -74,6 +80,19 @@ namespace PA_1_Abstract_Animal
             Console.WriteLine(getName() + " is a cat.");
             base.printInfo();
         }
+        
+        // increases the cat's age by one year and prints the "age status." A cat 11 years or older is considered senior in this case.
+        // @post cat's age increased, and "age status" printed to console
+        public override void ageUp()
+        {
+            base.ageUp();
+            if (getAge() >= 11)
+            {
+                Console.WriteLine(getName() + '(' + getAge() + ')' + " is getting a little old for a cat.");
+            }
+            else
+                Console.WriteLine(getName() + '(' + getAge() + ')' + " is still young and spry for a cat!");
+        }
     }
     // Class Cassowary
     // A cassowary is a bird that makes a low boom-like noise
@@ -90,6 +109,19 @@ namespace PA_1_Abstract_Animal
             Console.WriteLine(getName() + " is a cassowary.");
             base.printInfo();
         }
+
+        // increases the cassowary's age by one year and prints the "age status." A cassowary lives 40-50 years, so I'll consider 47 years to be senior in this case (arbitrary)
+        // @post cassowary's age increased, and "age status" printed to console
+        public override void ageUp()
+        {
+            base.ageUp();
+            if (getAge() >= 47)
+            {
+                Console.WriteLine(getName() + '(' + getAge() + ')' + " is getting a little old for cassowary.");
+            }
+            else
+                Console.WriteLine(getName() + '(' + getAge() + ')' + " is still young and spry for a cassowary!");
+        }
     }
     // Class Cow
     // A cow is an animal that moos and probably eats grass
@@ -105,6 +137,19 @@ namespace PA_1_Abstract_Animal
         {
             Console.WriteLine(getName() + " is a cow.");
             base.printInfo();
+        }
+
+        // increases the cow's age by one year and prints the "age status." A cow in the wild lives about 26 years, so we'll consider a 24 year old cow to be senior.
+        // @post cat's age increased, and "age status" printed to console
+        public override void ageUp()
+        {
+            base.ageUp();
+            if (getAge() >= 24)
+            {
+                Console.WriteLine(getName() + '(' + getAge() + ')' + " is getting a little old for a cow.");
+            }
+            else
+                Console.WriteLine(getName() + '(' + getAge() + ')' + " is still young and spry for a cow!");
         }
     }
     
@@ -231,6 +276,7 @@ namespace PA_1_Abstract_Animal
                         for (int i = 0; i < zoo.roster.Count; i++)
                         {
                             zoo.roster[i].printInfo();
+                            Console.WriteLine();
                         }
                         break;
                     // prints every animal's name
