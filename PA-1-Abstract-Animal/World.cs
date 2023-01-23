@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace PA_1_Abstract_Animal
 {
     // Class Animal
-    // An abstract class for animals, contains information like name, noise, age, and weight, and an abstract method requiring a way to print this information
+    // An abstract class for animals, contains information like name, noise, age, and weight, and abstract methods requiring a way to print this information
     abstract class Animal
     {
         private string Name, Noise;
@@ -140,7 +140,7 @@ namespace PA_1_Abstract_Animal
         }
 
         // increases the cow's age by one year and prints the "age status." A cow in the wild lives about 26 years, so we'll consider a 24 year old cow to be senior.
-        // @post cat's age increased, and "age status" printed to console
+        // @post cow's age increased, and "age status" printed to console
         public override void ageUp()
         {
             base.ageUp();
